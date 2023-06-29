@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { Alert, Space } from 'antd'
+import BucketSelection from './BucketSelection';
 
 function SearchLogs({uniqueId, logOnLoad}) {
   const [searchTerm, setSearchTerm] = useState('');
   const [logs, setLogs] = useState([]);
+  const [searchResults, setSearchResults] = useState([]);
 
   const handleSearch = async () => {
     try {
-      const response = await fetch(`https://localhost:7135/api/searchLogs?searchTerm=${searchTerm}&uniqueId=${uniqueId}`);;
+      const response = await fetch(`https://localhost:7135/api/searchLogs?searchTerm=${searchTerm}&uniqueId=${uniqueId}`);
       const logsData = await response.json();
       setLogs(logsData);
       debugger;
@@ -16,10 +18,33 @@ function SearchLogs({uniqueId, logOnLoad}) {
     }
   };
 
+  const handleSearchBucket = async (requestData) => {
+    debugger;
+    try {
+      const response = await fetch('https://localhost:7135/api/search', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestData),
+      });
+      if (response.ok) {
+        const data = await response.json();
+        debugger;
+        setLogs(data);
+      } else {
+        console.error('Search request failed.');
+      }
+    } catch (error) {
+      console.error('Error occurred during search request.', error);
+    }
+  };
+
   return (
     <div>
       <input type="text" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
       <button onClick={handleSearch}>Search</button>
+      <BucketSelection onSearch={handleSearchBucket} uniqueId={uniqueId} />
       {logs.length > 0 ? (
               logs.map((log) => (
                 // <div
