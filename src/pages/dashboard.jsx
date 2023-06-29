@@ -5,7 +5,7 @@ import { BookOutlined, DashboardOutlined, AlertOutlined } from "@ant-design/icon
 import { Col, Menu, Row, Skeleton } from "antd";
 import { useState } from "react";
 import AuthMiddleware from "../components/auth";
-import VisualizationTab from "../components/VisualizationTab";
+import VisualizationTab from "./VisualizationTab";
 import Visualization from "./visualization";
 import AlertsTab from "./alerts";
 import Logs from "./logs";

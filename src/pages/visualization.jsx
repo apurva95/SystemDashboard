@@ -1,7 +1,7 @@
 //@ts-check
 import React, { useEffect, useState } from "react";
 import { DashboardOutlined } from "@ant-design/icons";
-import VisualizationTab from "../components/VisualizationTab";
+import VisualizationTab from "./VisualizationTab";
 
 const Visualization = () => {
    const [appID, setappID] = useState("");
