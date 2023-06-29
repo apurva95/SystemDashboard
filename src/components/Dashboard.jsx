@@ -28,6 +28,7 @@ const Dashboard = ({ uniqueId }) => {
     fetchAlertsAndLogs(tab);
   };
 
+
   return (
     <div className="dashboard-container">
       <div className="tabs-container">
