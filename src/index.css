@@ -1,16 +1,56 @@
+/* Reset everything */
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
 .chart-container {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-gap: 20px;
-    padding: 20px;
-  }
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 20px;
+  padding: 20px;
+}
+
+.chart-item {
+  padding: 20px;
+  background-color: #f2f2f2;
+  border-radius: 6px;
+  transition: all 0.3s ease-in-out;
   
-  .chart-item {
-    padding: 20px;
-    background-color: #f2f2f2;
-  }
-  
-  .chart-title {
-    margin-bottom: 10px;
-    font-weight: bold;
-  }
+}
+.chart-item:hover {
+  background: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.chart-title {
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.login {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url("https://i.imgur.com/XjsYfVd.png");
+  background-repeat: no-repeat;
+  background-position: center 110px;
+  background-size: 100%;
+  position: relative;
+}
+.mt-5 {
+  margin-top: 15px;
+}
+
+.page-header{
+  border-bottom: 1px solid #c4c4c4;
+  height: 50px;
+  line-height: 50px;
+  padding-left: 12px;
+  font-size: 1.2rem;
+}
+.main-tabs{
+  height: 100vh;
+  overflow-y: auto;
+}

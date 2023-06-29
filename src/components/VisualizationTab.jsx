@@ -1,5 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { Pie, Bar, G2, Area } from '@ant-design/plots';
+import React, { useEffect, useState } from "react";
+import { Pie, Bar, G2, Area } from "@ant-design/plots";
+import { Player, Controls } from "@lottiefiles/react-lottie-player";
+import LoadingAnimation from "../assets/loading.json";
+import { Skeleton, Result } from "antd";
+// import lottie player
 
 const VisualizationTab = ({ uniqueId }) => {
   const [logs, setLogs] = useState([]);
@@ -8,47 +12,55 @@ const VisualizationTab = ({ uniqueId }) => {
   const [configLine, setConfigForLine] = useState({});
   const [configLineError, setConfigForLineError] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const [loading1, setloading1] = useState(false);
+  const [loading2, setloading2] = useState(false);
+  const [loading3, setloading3] = useState(false);
+  const [loading4, setloading4] = useState(false);
+  const [isError, setisError] = useState(false);
 
   useEffect(() => {
+    if(!uniqueId){
+      return;
+    }
     fetchLogs();
-  }, []);
+  }, [uniqueId]);
 
   const { registerTheme } = G2;
-  registerTheme('custom-theme', {
+  registerTheme("custom-theme", {
     colors10: [
-      '#025DF4',
-      '#DB6BCF',
-      '#2498D1',
-      '#BBBDE6',
-      '#4045B2',
-      '#21A97A',
-      '#FF745A',
-      '#007E99',
-      '#FFA8A8',
-      '#2391FF',
+      "#025DF4",
+      "#DB6BCF",
+      "#2498D1",
+      "#BBBDE6",
+      "#4045B2",
+      "#21A97A",
+      "#FF745A",
+      "#007E99",
+      "#FFA8A8",
+      "#2391FF"
     ],
     colors20: [
-      '#025DF4',
-      '#DB6BCF',
-      '#2498D1',
-      '#BBBDE6',
-      '#4045B2',
-      '#21A97A',
-      '#FF745A',
-      '#007E99',
-      '#FFA8A8',
-      '#2391FF',
-      '#FFC328',
-      '#A0DC2C',
-      '#946DFF',
-      '#626681',
-      '#EB4185',
-      '#CD8150',
-      '#36BCCB',
-      '#327039',
-      '#803488',
-      '#83BC99',
-    ],
+      "#025DF4",
+      "#DB6BCF",
+      "#2498D1",
+      "#BBBDE6",
+      "#4045B2",
+      "#21A97A",
+      "#FF745A",
+      "#007E99",
+      "#FFA8A8",
+      "#2391FF",
+      "#FFC328",
+      "#A0DC2C",
+      "#946DFF",
+      "#626681",
+      "#EB4185",
+      "#CD8150",
+      "#36BCCB",
+      "#327039",
+      "#803488",
+      "#83BC99"
+    ]
   });
   let data = [];
   let lineData = [];
@@ -60,78 +72,85 @@ const VisualizationTab = ({ uniqueId }) => {
 
   const fetchLogs = async () => {
     try {
+      setloading1(true);
       const response = await fetch(`/api/visualisationLogs?uniqueId=${uniqueId}`);
       const result = await response.json();
       data = Object.entries(result).map(([type, value]) => ({
         type: `${type}`,
-        value: value,
+        value: value
       }));
+      setloading1(false);
+      setloading2(true);
       const lineResponse = await fetch(`/api/visualisationLogsForLineGraph?uniqueId=${uniqueId}`);
       const lineResult = await lineResponse.json();
       lineData = Object.entries(lineResult).map(([type, value]) => ({
         type: `${type}`,
-        count: value,
+        count: value
       }));
-      const lineErrorResponse = await fetch(`/api/visualisationLogsForLineGraphError?uniqueId=${uniqueId}`);
+      setloading2(false);
+      setloading3(true);
+      const lineErrorResponse = await fetch(
+        `/api/visualisationLogsForLineGraphError?uniqueId=${uniqueId}`
+      );
       const lineErrorResult = await lineErrorResponse.json();
       lineErrorData = Object.entries(lineErrorResult).map(([type, value]) => ({
         type: `${type}`,
-        count: value,
+        count: value
       }));
-      debugger;
+      setloading3(false);
+
       configSetPie = {
         appendPadding: 10,
         data,
-        angleField: 'value',
-        colorField: 'type',
+        angleField: "value",
+        colorField: "type",
         radius: 0.8,
         label: {
-          type: 'inner',
-          offset: '-10%',
-          content: '{percentage}',
+          type: "inner",
+          offset: "-10%",
+          content: "{percentage}"
         },
         interactions: [
           {
-            type: 'element-active',
-          },
+            type: "element-active"
+          }
         ],
-        theme: 'custom-theme',
+        theme: "custom-theme"
       };
       configSetBar = {
         appendPadding: 10,
         data,
-        xField: 'value', // Field for the x-axis values
-        yField: 'type', // Field for the y-axis values
-        seriesField: 'type',
+        xField: "value", // Field for the x-axis values
+        yField: "type", // Field for the y-axis values
+        seriesField: "type",
         barWidthRatio: 0.8,
-    legend: {
-      position: 'top-left',
-    },
+        legend: {
+          position: "top-left"
+        },
         interactions: [
           {
-            type: 'element-active',
-          },
+            type: "element-active"
+          }
         ],
-        theme: 'custom-theme',
+        theme: "custom-theme"
       };
-      configSetLine  = {
+      configSetLine = {
         data: lineData,
-        xField: 'type',
-        yField: 'count',
+        xField: "type",
+        yField: "count",
         xAxis: {
-          range: [0, 1],
-        },
+          range: [0, 1]
+        }
       };
-      configSetLineError  = {
+      configSetLineError = {
         data: lineErrorData,
-        xField: 'type',
-        yField: 'count',
+        xField: "type",
+        yField: "count",
         xAxis: {
-          range: [0, 1],
-        },
+          range: [0, 1]
+        }
       };
-    
-      debugger;
+
       setLogs(data);
       setConfigForPie(configSetPie);
       setConfigForBar(configSetBar);
@@ -139,31 +158,46 @@ const VisualizationTab = ({ uniqueId }) => {
       setConfigForLineError(configSetLineError);
       setIsLoading(false);
     } catch (error) {
-      console.error('Error fetching logs:', error);
+      console.error("Error fetching logs:", error);
+      setisError(true);
     }
   };
 
   return (
     <div>
       {isLoading ? (
-        <div>Loading...</div>
+        <div>
+          <Player
+            autoplay
+            loop
+            src={LoadingAnimation}
+            style={{ height: "300px", width: "300px", marginTop: "12rem" }}
+          />
+        </div>
       ) : logs.length > 0 ? (
         <div className="chart-container">
           <div className="chart-item">
-            <Pie {...configPie} />
+            {loading1 && <Skeleton active paragraph={{ rows: 10 }} />}
+            {!loading1 && <Pie {...configPie} />}
           </div>
           <div className="chart-item">
-            <Bar {...configBar} />
+            {loading1 && <Skeleton active paragraph={{ rows: 10 }} />}
+            {!loading1 && <Bar {...configBar} />}
           </div>
           <div className="chart-item">
-            <Area {...configLine} />
+            {loading2 && <Skeleton active paragraph={{ rows: 10 }} />}
+            {!loading2 && <Area {...configLine} />}
           </div>
           <div className="chart-item">
-            <Area {...configLineError} />
+            {loading3 && <Skeleton active paragraph={{ rows: 10 }} />}
+            {!loading3 && <Area {...configLineError} />}
           </div>
         </div>
       ) : (
         <div>No data available</div>
+      )}
+      {!isLoading && isError && (
+        <Result status="500" title="500" subTitle="Sorry, something went wrong." />
       )}
     </div>
   );
