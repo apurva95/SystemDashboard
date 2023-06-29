@@ -7,7 +7,7 @@ function SearchLogs({uniqueId, logOnLoad}) {
 
   const handleSearch = async () => {
     try {
-      const response = await fetch(`https://localhost:7135/api/searchLogs?searchTerm=${searchTerm}&uniqueId=${uniqueId}`);;
+      const response = await fetch(`/api/searchLogs?searchTerm=${searchTerm}&uniqueId=${uniqueId}`);;
       const logsData = await response.json();
       setLogs(logsData);
       debugger;

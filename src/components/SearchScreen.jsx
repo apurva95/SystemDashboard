@@ -5,7 +5,7 @@ const SearchScreen = ({ onUniqueIdChange }) => {
     const [isValid, setIsValid] = useState(false);
   
     const handleSearch = async () => {
-      const response = await fetch(`https://localhost:7135/api/checkUniqueId?uniqueId=${uniqueId}`);
+      const response = await fetch(`/api/checkUniqueId?uniqueId=${uniqueId}`);
       const data = await response.json();
       setIsValid(data.exists);
       if (data.exists) {

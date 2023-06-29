@@ -92,7 +92,7 @@ const VisualizationTab = ({uniqueId}) => {
 
   const fetchLogs = async () => {
     try {
-      const response = await fetch(`https://localhost:7135/api/visualisationLogs?uniqueId=${uniqueId}`);
+      const response = await fetch(`/api/visualisationLogs?uniqueId=${uniqueId}`);
       const data = await response.json();
       debugger;
       setLogs(data);

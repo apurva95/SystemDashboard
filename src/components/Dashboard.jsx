@@ -11,12 +11,12 @@ const Dashboard = ({ uniqueId }) => {
 
   const fetchAlertsAndLogs = useCallback(async (tab) => {
     if (tab === "alerts" && !fetchedData.alerts) {
-      const alertsResponse = await fetch(`https://localhost:7135/api/alerts?uniqueId=${uniqueId}`);
+      const alertsResponse = await fetch(`/api/alerts?uniqueId=${uniqueId}`);
       const alertsData = await alertsResponse.json();
       setAlerts(alertsData);
       setFetchedData({ ...fetchedData, alerts: true });
     } else if (tab === "logs" && !fetchedData.logs) {
-      const logsResponse = await fetch(`https://localhost:7135/api/logs?uniqueId=${uniqueId}`);
+      const logsResponse = await fetch(`/api/logs?uniqueId=${uniqueId}`);
       const logsData = await logsResponse.json();
       setLogs(logsData);
       setFetchedData({ ...fetchedData, logs: true });
