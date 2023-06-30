@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Alert, Space } from 'antd'
-import VisualizationTab from './VisualizationTab';
+import VisualizationTab from '../pages/VisualizationTab';
 import SearchLogs from './SearchLogs';
 
 const Dashboard = ({ uniqueId }) => {

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import Dashboard from './components/Dashboard';
-import Header from './components/Header';
-import Footer from './components/Footer';
-import SearchScreen from './components/SearchScreen';
+// import Dashboard from './components/Dashboard';
+// import Header from './components/Header';
+// import Footer from './components/Footer';
+// import SearchScreen from './components/SearchScreen';
 import './App.css';
 import {
   createBrowserRouter,
@@ -28,10 +28,10 @@ const router = createBrowserRouter([
   }
 ]);
 function App() {
-  const [uniqueId, setUniqueId] = useState('');
-  useEffect(() => {
+  // const [uniqueId, setUniqueId] = useState('');
+  // useEffect(() => {
 
-  }, []);
+  // }, []);
 
   return (
     <div className="App">

@@ -29,7 +29,8 @@ const LoginPage = () => {
       fetch(`/api/checkUniqueID?uniqueId=${appID}`)
         .then((res) => res.json())
         .then((data) => {
-          if (data.exists) {
+          debugger;
+          if (data) {
             message.success("App ID is valid");
             // save to load local storage
             localStorage.setItem("appID", appID);
