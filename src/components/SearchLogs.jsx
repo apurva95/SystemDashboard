@@ -19,9 +19,8 @@ function SearchLogs({uniqueId, logOnLoad}) {
   };
 
   const handleSearchBucket = async (requestData) => {
-    debugger;
     try {
-      const response = await fetch('https://localhost:7135/api/search', {
+      const response = await fetch('/api/search', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -30,7 +29,6 @@ function SearchLogs({uniqueId, logOnLoad}) {
       });
       if (response.ok) {
         const data = await response.json();
-        debugger;
         setLogs(data);
       } else {
         console.error('Search request failed.');
