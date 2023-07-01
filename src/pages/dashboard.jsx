@@ -1,18 +1,20 @@
 //@ts-check
 // import react
 import React, { useEffect } from "react";
-import { BookOutlined, DashboardOutlined, AlertOutlined } from "@ant-design/icons";
+import { BookOutlined, DashboardOutlined, AlertOutlined, LogoutOutlined } from "@ant-design/icons";
 import { Col, Menu, Row, Skeleton } from "antd";
 import { useState } from "react";
 import AuthMiddleware from "../components/auth";
 import Visualization from "./visualization";
 import AlertsTab from "./alerts";
 import Logs from "./logs";
+import { useNavigate} from "react-router-dom";
 
 // submenu keys of first level
 const HomePage = () => {
   const [openKey, setOpenKey] = useState("visualise");
   const [appID, setappID] = useState("");
+  const history = useNavigate();
 
   useEffect(() => {
     // get token_id from  local storage
@@ -40,6 +42,11 @@ const HomePage = () => {
     getItem("Logs", "logs", <BookOutlined />)
   ];
 
+  const doLogout = () => { 
+    window.localStorage.removeItem("appID");
+    history("/login");
+   }
+
   return (
     <AuthMiddleware>
       <Row>
@@ -59,6 +66,9 @@ const HomePage = () => {
               }}
               items={items}
             />
+          </div>
+          <div className="logout" onClick={doLogout}>
+            <LogoutOutlined/>
           </div>
         </Col>
         <Col span={23}>

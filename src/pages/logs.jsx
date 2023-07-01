@@ -7,10 +7,10 @@ import {
   ReloadOutlined,
   WarningOutlined
 } from "@ant-design/icons";
-import { Controls, Player } from "@lottiefiles/react-lottie-player";
-import { Alert, Button, Card, Col, DatePicker, Input, Radio, Row, message } from "antd";
+import { Player } from "@lottiefiles/react-lottie-player";
+import {  Button, Col, DatePicker, Input, Radio, Row, message } from "antd";
 import React, { useEffect, useState } from "react";
-import LoadingAnimation from "../assets/loading.json";
+import LoadingAnimation from "../assets/logsLoader.json";
 import LogViewer from "../components/logview";
 
 const { Search } = Input;
@@ -84,7 +84,7 @@ const Logs = () => {
     }
     try {
       message.loading("Loading...");
-      const response = await fetch(`/api/search?uniqueId=${appID}&level=${e.target.value}`);
+      const response = await fetch(`https://localhost:7135/api/search?uniqueId=${appID}&level=${e.target.value}`);
       const logsData = await response.json();
       setLogs(logsData);
       setIsLoading(false);
@@ -97,7 +97,7 @@ const Logs = () => {
   };
   const handleSearch = async (e) => {
     try {
-      const response = await fetch(`/api/searchLogs?searchTerm=${e}&uniqueId=${appID}`);
+      const response = await fetch(`https://localhost:7135/api/searchLogs?searchTerm=${e}&uniqueId=${appID}`);
       const logsData = await response.json();
       setLogs(logsData);
       setIsLoading(false);
@@ -110,7 +110,7 @@ const Logs = () => {
     try {
       if (dates) {
         const response = await fetch(
-          `/api/searchLogsTimeRange?uniqueId=${appID}&from=${dateStrings[0]}&to=${dateStrings[1]}`
+          `https://localhost:7135/api/searchLogsTimeRange?uniqueId=${appID}&from=${dateStrings[0]}&to=${dateStrings[1]}`
         );
         const logsData = await response.json();
         setLogs(logsData);
@@ -164,16 +164,20 @@ const Logs = () => {
           <h3>Time Range</h3>
           <RangePicker showTime onChange={onRangeChange} />
         </Col>
-        <Col span={7}>
+        <Col span={7} style={{
+         paddingLeft: "10px"
+        }}>
           <h3>Search</h3>
           <Search
             placeholder="input search text"
             onSearch={(value) => handleSearch(value)}
-            enterButton
+            enterButton 
             allowClear
           />
         </Col>
-        <Col span={2}>
+        <Col span={2} style={{
+         paddingLeft: "10px"
+        }}>
           <h3>&nbsp;</h3>
 
           <Button

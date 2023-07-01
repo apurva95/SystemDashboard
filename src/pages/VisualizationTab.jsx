@@ -73,7 +73,7 @@ const VisualizationTab = ({ uniqueId }) => {
   const fetchLogs = async () => {
     try {
       setloading1(true);
-      const response = await fetch(`/api/visualisationLogs?uniqueId=${uniqueId}`);
+      const response = await fetch(`https://localhost:7135/api/visualisationLogs?uniqueId=${uniqueId}`);
       const result = await response.json();
       data = Object.entries(result).map(([type, value]) => ({
         type: `${type}`,
@@ -81,7 +81,7 @@ const VisualizationTab = ({ uniqueId }) => {
       }));
       setloading1(false);
       setloading2(true);
-      const lineResponse = await fetch(`/api/visualisationLogsForLineGraph?uniqueId=${uniqueId}`);
+      const lineResponse = await fetch(`https://localhost:7135/api/visualisationLogsForLineGraph?uniqueId=${uniqueId}`);
       const lineResult = await lineResponse.json();
       lineData = Object.entries(lineResult).map(([type, value]) => ({
         type: `${type}`,
@@ -90,7 +90,7 @@ const VisualizationTab = ({ uniqueId }) => {
       setloading2(false);
       setloading3(true);
       const lineErrorResponse = await fetch(
-        `/api/visualisationLogsForLineGraphError?uniqueId=${uniqueId}`
+        `https://localhost:7135/api/visualisationLogsForLineGraphError?uniqueId=${uniqueId}`
       );
       const lineErrorResult = await lineErrorResponse.json();
       lineErrorData = Object.entries(lineErrorResult).map(([type, value]) => ({
@@ -194,7 +194,21 @@ const VisualizationTab = ({ uniqueId }) => {
           </div>
         </div>
       ) : (
-        <div>No data available</div>
+        <>
+            <Player
+              autoplay
+              loop
+              src="https://assets10.lottiefiles.com/packages/lf20_qlwqp9xi.json"
+              style={{ height: "300px", width: "300px", marginTop: "12rem" }}
+            ></Player>
+            <h3
+              style={{
+                textAlign: "center"
+              }}
+            >
+              No Data is Available
+            </h3>
+          </>
       )}
       {!isLoading && isError && (
         <Result status="500" title="500" subTitle="Sorry, something went wrong." />

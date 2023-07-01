@@ -29,7 +29,6 @@ const AuthMiddleware = (props) => {
           <Skeleton active />
         </>
       )}
-      {}
     </div>
   );
 };
