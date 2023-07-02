@@ -178,19 +178,19 @@ const VisualizationTab = ({ uniqueId }) => {
         <div className="chart-container">
           <div className="chart-item">
             {loading1 && <Skeleton active paragraph={{ rows: 10 }} />}
-            {!loading1 && <Pie {...configPie} />}
+            {!loading1 && <><h2>Number of Logs Per Day</h2> <Pie {...configPie} title="Pie Chart for Log Levels" /></>}
           </div>
           <div className="chart-item">
             {loading1 && <Skeleton active paragraph={{ rows: 10 }} />}
-            {!loading1 && <Bar {...configBar} />}
+            {!loading1 &&<><h2>Number of Logs Per Day</h2> <Bar {...configBar} /></>}
           </div>
           <div className="chart-item">
             {loading2 && <Skeleton active paragraph={{ rows: 10 }} />}
-            {!loading2 && <Area {...configLine} />}
+            {!loading2 &&<><h2>Number of Logs Per Day</h2> <Area {...configLine} title="Chart for Number of Logs Per Day"/></>}
           </div>
           <div className="chart-item">
             {loading3 && <Skeleton active paragraph={{ rows: 10 }} />}
-            {!loading3 && <Area {...configLineError} />}
+            {!loading3 &&<><h2>Error/Critical Logs per 3 hrs</h2> <Area {...configLineError} title="Chart for Error/Critical per 3 hrs"/></>}
           </div>
         </div>
       ) : (

@@ -22,7 +22,7 @@ const LogViewer = (props) => {
   return (
     <div>
       {currentSets.map((log) => (
-        <Alert message={log.message + "" + log.type} type={log.level} hoverable />
+        <Alert message={log.message + "" + log.type} type={log.level} hoverable showIcon />
       ))}
 
       <div

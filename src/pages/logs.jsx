@@ -8,10 +8,15 @@ import {
   WarningOutlined
 } from "@ant-design/icons";
 import { Player } from "@lottiefiles/react-lottie-player";
-import {  Button, Col, DatePicker, Input, Radio, Row, message } from "antd";
+import { Button, Col, DatePicker, Input, Radio, Row, message, Dropdown, Menu } from "antd";
 import React, { useEffect, useState } from "react";
 import LoadingAnimation from "../assets/logsLoader.json";
 import LogViewer from "../components/logview";
+import { DownOutlined, FilePdfOutlined, FileExcelOutlined } from '@ant-design/icons';
+import { saveAs } from 'file-saver';
+import PdfMake from 'pdfmake/build/pdfmake';
+import PdfFonts from 'pdfmake/build/vfs_fonts';
+PdfMake.vfs = PdfFonts.pdfMake.vfs;
 
 const { Search } = Input;
 const { RangePicker } = DatePicker;
@@ -121,6 +126,60 @@ const Logs = () => {
       setIsLoading(false);
     }
   };
+  // const handleExport = (type) => {
+  //   try {
+  //     switch (type) {
+  //       case 'pdf':
+  //         debugger;
+  //         // Generate PDF
+  //         const pdfContent = {
+  //           content: [
+  //             {
+  //               table: {
+  //                 headerRows: 1,
+  //                 widths: ['auto', 'auto', 'auto', 'auto', '*'],
+  //                 body: [
+  //                   ['TimeStamp', 'Level', 'Calling File', 'Calling Method and Line', 'Message'],
+  //                   ...logs.map(log => [
+  //                     log.timeStamp || '',
+  //                     log.level || '',
+  //                     log.callingFile || '',
+  //                     log.callingMethodAndLine || '',
+  //                     log.message || ''
+  //                   ])
+  //                 ]
+  //               }
+  //             }
+  //           ]
+  //         };
+  //         const pdfDoc = PdfMake.createPdf(pdfContent);
+  //         pdfDoc.getBuffer((buffer) => {
+  //           const pdfBlob = new Blob([buffer], { type: 'application/pdf' });
+  //           debugger;
+  //           saveAs(pdfBlob, 'logs.pdf');
+  //         });
+  //         break;
+
+  //       case 'csv':
+  //         // Generate CSV
+  //         let csvContent = 'Index,TimeStamp,Level,Calling File,Calling Method and Line,Message\n';
+  //         for (const log of logs) {
+  //           const csvLine = `${log.index},"${log.timeStamp}","${log.level}","${log.callingFile}","${log.callingMethodAndLine}","${log.message}"\n`;
+  //           csvContent += csvLine;
+  //         }
+  //         const csvBlob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  //         saveAs(csvBlob, 'logs.csv');
+  //         break;
+
+  //       default:
+  //         break;
+  //     }
+  //   }
+  //   catch (error) {
+  //     console.error('Error exporting logs:', error);
+  //     message.error('Error exporting logs. Please try again.');
+  //   }
+  // };
   useEffect(() => {
     // get token_id from  local storage
     if (window && window.localStorage) {
@@ -165,21 +224,20 @@ const Logs = () => {
           <RangePicker showTime onChange={onRangeChange} />
         </Col>
         <Col span={7} style={{
-         paddingLeft: "10px"
+          paddingLeft: "10px"
         }}>
           <h3>Search</h3>
           <Search
             placeholder="input search text"
             onSearch={(value) => handleSearch(value)}
-            enterButton 
+            enterButton
             allowClear
           />
         </Col>
         <Col span={2} style={{
-         paddingLeft: "10px"
+          paddingLeft: "10px"
         }}>
           <h3>&nbsp;</h3>
-
           <Button
             onClick={() => {
               setcurrentLevel("All");
@@ -192,6 +250,24 @@ const Logs = () => {
           >
             <ReloadOutlined /> Refresh
           </Button>
+          {/* <Dropdown
+            overlay={
+              <Menu>
+                <Menu.Item key="pdf" onClick={() => handleExport('pdf')}>
+                  <FilePdfOutlined />
+                  Export as PDF
+                </Menu.Item>
+                <Menu.Item key="csv" onClick={() => handleExport('csv')}>
+                  <FileExcelOutlined />
+                  Export as CSV
+                </Menu.Item>
+              </Menu>
+            }
+          >
+            <Button>
+              Export <DownOutlined />
+            </Button>
+          </Dropdown> */}
         </Col>
       </Row>
       <div
