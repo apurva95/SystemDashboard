@@ -18,11 +18,12 @@ const LogViewer = (props) => {
     const indexOfLastLog = currentPage * logsPerPage;
     const indexOfFirstLog = indexOfLastLog - logsPerPage;
     setcurrentSets(logs.slice(indexOfFirstLog, indexOfLastLog));
+    debugger;
   }, [currentPage, logsPerPage]);
   return (
     <div>
       {currentSets.map((log) => (
-        <Alert message={log.message + "" + log.type} type={log.level} hoverable showIcon />
+        <Alert message={log.message + "" + log.type} type={log.level} hoverable />
       ))}
 
       <div

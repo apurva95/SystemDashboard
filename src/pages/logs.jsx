@@ -18,7 +18,7 @@ import LogViewer from "../components/logview";
 // import PdfFonts from 'pdfmake/build/vfs_fonts';
 // PdfMake.vfs = PdfFonts.pdfMake.vfs;
 import {AgGridReact} from 'ag-grid-react';
-
+import DTPicker from "../components/DTPicker";
 import 'ag-grid-community/styles//ag-grid.css';
 import 'ag-grid-community/styles//ag-theme-alpine.css';
 
@@ -86,6 +86,7 @@ const Logs = () => {
   const [logs, setLogs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentLevel, setcurrentLevel] = useState("All");
+  const [gridApi, setGridApi] = useState([]);
 
   const handleSearchLevel = async (/** @type {{ target: { value: any; }; }} */ e) => {
     if (!appID) {
@@ -95,6 +96,7 @@ const Logs = () => {
       message.loading("Loading...");
       const response = await fetch(`https://localhost:7135/api/search?uniqueId=${appID}&level=${e.target.value}`);
       const logsData = await response.json();
+              debugger;
       setLogs(logsData);
       setIsLoading(false);
       message.destroy();
@@ -110,6 +112,7 @@ const Logs = () => {
       const logsData = await response.json();
       setLogs(logsData);
       setIsLoading(false);
+      debugger;
     } catch (error) {
       console.error(error);
       setIsLoading(false);
@@ -140,23 +143,73 @@ const Logs = () => {
       animateRows:true,
       suppressAggFuncInHeader:true,
       domLayout:"autoHeight",
-      wrapText: true
+      wrapText: true,
+      autoHeight: true,
+      resizable:true,
+      filterParams: {
+        buttons: ['apply', 'clear', 'reset'],
+      },
     };
   }, []);
 
+  const resetAppliedFilters = () => {
+    gridApi.setFilterModel(null);
+  };
+
   const gridOptions = {
     columnDefs: [
-      {headerName: "Timestamp", field: "timeStamp",cellStyle: { whiteSpace: 'normal' }},
-      {headerName: "Level", field: "level",cellStyle: { whiteSpace: 'normal' }},
-      {headerName: "Calling File", field: "callingFile",cellStyle: { whiteSpace: 'normal' }},
-      {headerName: "Calling Method", field: "callingMethod",cellStyle: { whiteSpace: 'normal' }},
-      {headerName: "Message", field: "message",cellStyle: { whiteSpace: 'normal' }}
+      {headerName: "Timestamp", field: "timeStamp", filter: "agDateColumnFilter", flex: 1.2,
+      filterParams: {
+        defaultOption: "inRange",
+        comparator: function(filterLocalDate, cellValue) {
+          filterLocalDate = new Date(filterLocalDate)
+          cellValue = new Date(cellValue)
+          let filterBy = filterLocalDate.getTime();
+          let filterMe = cellValue.getTime();
+          debugger;
+          if (filterBy === filterMe) {
+            return 0;
+          }
+
+          if (filterMe < filterBy) {
+            return -1;
+          }
+
+          if (filterMe > filterBy) {
+            return 1;
+          }
+        }
+      },valueFormatter: function (params) {
+        // Format the date and time to "dd-mm-yyyy HH:mm:ss" format
+        const date = new Date(params.value);
+        const formattedDate = date.toLocaleDateString('en-GB', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+        });
+        const formattedTime = date.toLocaleTimeString('en-US', {
+          hour12: false,
+        });
+  
+        return `${formattedDate} ${formattedTime}`;
+      }},
+      {headerName: "Level", field: "level",flex: 1},
+      {headerName: "Calling File", field: "callingFile",flex: 3},
+      {headerName: "Calling Method", field: "callingMethod",flex: 1},
+      {headerName: "Message", field: "message",flex: 3}
     ],
     rowData: logs,
     defaultColDef:defaultColDef,
     onGridReady: (params) => {
-      params.api.sizeColumnsToFit();
+      setGridApi(params.api);
+      //params.api.sizeColumnsToFit();
     },
+    rowClassRules: {
+      "row-information": params => params.api.getValue("level", params.node) === 'Information',
+      "row-error": params => params.api.getValue("level", params.node) === 'Error',
+      "row-warning": params => params.api.getValue("level", params.node) === 'Warning',
+      "row-critical": params => params.api.getValue("level", params.node) === 'Critical'
+    }
   }
 
   // const handleExport = (type) => {
@@ -271,7 +324,7 @@ const Logs = () => {
           paddingLeft: "10px"
         }}>
           <h3>&nbsp;</h3>
-          <Button
+          {/* <Button
             onClick={() => {
               setcurrentLevel("All");
               handleSearchLevel({
@@ -282,7 +335,11 @@ const Logs = () => {
             }}
           >
             <ReloadOutlined /> Refresh
-          </Button>
+            
+          </Button> */}
+          <Button onClick={resetAppliedFilters} variant="outlined">
+        Reset Filters
+      </Button>
           {/* <Dropdown
             overlay={
               <Menu>
@@ -320,12 +377,10 @@ const Logs = () => {
         ) : logs.length > 0 ? (
           <div
 				className="ag-theme-alpine"
-				style={{
-					height: '520px',
-				}}
+				 style={{ height: "76vh", width: "100%" }}
 			>
-				<AgGridReact
-                    gridOptions={gridOptions} 
+				<AgGridReact components={{ agDateInput: DTPicker }}
+                    gridOptions={gridOptions} rowSelection="multiple"
                     excel>
 				</AgGridReact>
 			</div>

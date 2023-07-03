@@ -26,7 +26,7 @@ const LoginPage = () => {
       return;
     } else {
       // check the url to validate the app id
-      fetch(`/api/checkUniqueID?uniqueId=${appID}`)
+      fetch(`https://localhost:7135/api/checkUniqueID?uniqueId=${appID}`)
         .then((res) => res.json())
         .then((data) => {
           debugger;

@@ -71,3 +71,23 @@
   height: 30px;
   display: inline-block;
 }
+
+.row-information {
+  font-weight: bold;
+  background-color: #7ddce9 !important;
+}
+
+.row-warning {
+  font-weight: bold;
+  background-color: #ece871 !important;
+}
+
+.row-error {
+  font-weight: bold;
+  background-color: #db836f !important;
+}
+
+.row-critical {
+  font-weight: bold;
+  background-color: #ee5836 !important;
+}
