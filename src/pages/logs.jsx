@@ -9,14 +9,18 @@ import {
 } from "@ant-design/icons";
 import { Player } from "@lottiefiles/react-lottie-player";
 import { Button, Col, DatePicker, Input, Radio, Row, message, Dropdown, Menu } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import LoadingAnimation from "../assets/logsLoader.json";
 import LogViewer from "../components/logview";
-import { DownOutlined, FilePdfOutlined, FileExcelOutlined } from '@ant-design/icons';
-import { saveAs } from 'file-saver';
-import PdfMake from 'pdfmake/build/pdfmake';
-import PdfFonts from 'pdfmake/build/vfs_fonts';
-PdfMake.vfs = PdfFonts.pdfMake.vfs;
+// import { DownOutlined, FilePdfOutlined, FileExcelOutlined } from '@ant-design/icons';
+// import { saveAs } from 'file-saver';
+// import PdfMake from 'pdfmake/build/pdfmake';
+// import PdfFonts from 'pdfmake/build/vfs_fonts';
+// PdfMake.vfs = PdfFonts.pdfMake.vfs;
+import {AgGridReact} from 'ag-grid-react';
+
+import 'ag-grid-community/styles//ag-grid.css';
+import 'ag-grid-community/styles//ag-theme-alpine.css';
 
 const { Search } = Input;
 const { RangePicker } = DatePicker;
@@ -126,6 +130,35 @@ const Logs = () => {
       setIsLoading(false);
     }
   };
+  const defaultColDef = useMemo(() => {
+    return {
+      flex: 1,
+      sortable: true,
+      filter: true,
+      pagination: true,
+      paginationPageSize: 10,
+      animateRows:true,
+      suppressAggFuncInHeader:true,
+      domLayout:"autoHeight",
+      wrapText: true
+    };
+  }, []);
+
+  const gridOptions = {
+    columnDefs: [
+      {headerName: "Timestamp", field: "timeStamp",cellStyle: { whiteSpace: 'normal' }},
+      {headerName: "Level", field: "level",cellStyle: { whiteSpace: 'normal' }},
+      {headerName: "Calling File", field: "callingFile",cellStyle: { whiteSpace: 'normal' }},
+      {headerName: "Calling Method", field: "callingMethod",cellStyle: { whiteSpace: 'normal' }},
+      {headerName: "Message", field: "message",cellStyle: { whiteSpace: 'normal' }}
+    ],
+    rowData: logs,
+    defaultColDef:defaultColDef,
+    onGridReady: (params) => {
+      params.api.sizeColumnsToFit();
+    },
+  }
+
   // const handleExport = (type) => {
   //   try {
   //     switch (type) {
@@ -285,7 +318,17 @@ const Logs = () => {
             />
           </div>
         ) : logs.length > 0 ? (
-          <LogViewer logs={logs} />
+          <div
+				className="ag-theme-alpine"
+				style={{
+					height: '520px',
+				}}
+			>
+				<AgGridReact
+                    gridOptions={gridOptions} 
+                    excel>
+				</AgGridReact>
+			</div>
         ) : (
           <>
             <Player
