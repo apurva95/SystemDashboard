@@ -12,11 +12,12 @@ import { Button, Col, DatePicker, Input, Radio, Row, message, Dropdown, Menu } f
 import React, { useEffect, useState } from "react";
 import LoadingAnimation from "../assets/logsLoader.json";
 import LogViewer from "../components/logview";
-import { DownOutlined, FilePdfOutlined, FileExcelOutlined } from '@ant-design/icons';
-import { saveAs } from 'file-saver';
-import PdfMake from 'pdfmake/build/pdfmake';
-import PdfFonts from 'pdfmake/build/vfs_fonts';
-PdfMake.vfs = PdfFonts.pdfMake.vfs;
+//import PrintList from "../components/PrintList.tsx";
+// import { DownOutlined, FilePdfOutlined, FileExcelOutlined } from '@ant-design/icons';
+// import { saveAs } from 'file-saver';
+// import PdfMake from 'pdfmake/build/pdfmake';
+// import PdfFonts from 'pdfmake/build/vfs_fonts';
+//PdfMake.vfs = PdfFonts.pdfMake.vfs;
 
 const { Search } = Input;
 const { RangePicker } = DatePicker;
@@ -82,27 +83,27 @@ const Logs = () => {
   const [logs, setLogs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentLevel, setcurrentLevel] = useState("All");
+  const [timeFilter, setTimeFilter] = useState([]);
+  const [searchFilter, setSearchFilter] = useState("");
+  const [refreshCount, setRefreshCount] = useState(1);
 
-  const handleSearchLevel = async (/** @type {{ target: { value: any; }; }} */ e) => {
-    if (!appID) {
+
+
+   const handleFilters = async () => {
+    if(!appID)
+    {
       return;
     }
     try {
-      message.loading("Loading...");
-      const response = await fetch(`https://localhost:7135/api/search?uniqueId=${appID}&level=${e.target.value}`);
-      const logsData = await response.json();
-      setLogs(logsData);
-      setIsLoading(false);
-      message.destroy();
-    } catch (error) {
-      console.error(error);
-      setIsLoading(false);
-      message.destroy();
-    }
-  };
-  const handleSearch = async (e) => {
-    try {
-      const response = await fetch(`https://localhost:7135/api/searchLogs?searchTerm=${e}&uniqueId=${appID}`);
+      debugger
+      //const response = await fetch(`https://localhost:7135/api/searchTest?searchTerm=${e}&uniqueId=${appID}&type=Information&fromDate=Test&toDate=Test`);
+      const response = await fetch('https://localhost:7135/api/searchTest?' + new URLSearchParams({
+        searchTerm: searchFilter,
+        uniqueId: appID,
+        type: currentLevel,
+        fromDate: timeFilter[0]? timeFilter[0] : "",
+        toDate: timeFilter[1] ? timeFilter[1] : ""
+}))
       const logsData = await response.json();
       setLogs(logsData);
       setIsLoading(false);
@@ -111,21 +112,54 @@ const Logs = () => {
       setIsLoading(false);
     }
   };
-  const onRangeChange = async (dates, dateStrings) => {
-    try {
-      if (dates) {
-        const response = await fetch(
-          `https://localhost:7135/api/searchLogsTimeRange?uniqueId=${appID}&from=${dateStrings[0]}&to=${dateStrings[1]}`
-        );
-        const logsData = await response.json();
-        setLogs(logsData);
-        setIsLoading(false);
-      }
-    } catch (error) {
-      console.error(error);
-      setIsLoading(false);
-    }
-  };
+
+  useEffect (() => {
+    handleFilters();
+  },[currentLevel,searchFilter,timeFilter,appID,refreshCount]);
+
+  // const handleSearchLevel = async (/** @type {{ target: { value: any; }; }} */ e) => {
+  //   if (!appID) {
+  //     return;
+  //   }
+  //   try {
+  //     message.loading("Loading...");
+  //     const response = await fetch(`https://localhost:7135/api/search?uniqueId=${appID}&level=${e.target.value}`);
+  //     const logsData = await response.json();
+  //     setLogs(logsData);
+  //     setIsLoading(false);
+  //     message.destroy();
+  //   } catch (error) {
+  //     console.error(error);
+  //     setIsLoading(false);
+  //     message.destroy();
+  //   }
+  // };
+  // const handleSearch = async (e) => {
+  //   try {
+  //     const response = await fetch(`https://localhost:7135/api/searchTest?searchTerm=${e}&uniqueId=${appID}&type=Information&fromDate=Test&toDate=Test`);
+  //     const logsData = await response.json();
+  //     setLogs(logsData);
+  //     setIsLoading(false);
+  //   } catch (error) {
+  //     console.error(error);
+  //     setIsLoading(false);
+  //   }
+  // };
+  // const onRangeChange = async (dates, dateStrings) => {
+  //   try {
+  //     if (dates) {
+  //       const response = await fetch(
+  //         `https://localhost:7135/api/searchLogsTimeRange?uniqueId=${appID}&from=${dateStrings[0]}&to=${dateStrings[1]}`
+  //       );
+  //       const logsData = await response.json();
+  //       setLogs(logsData);
+  //       setIsLoading(false);
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //     setIsLoading(false);
+  //   }
+  // };
   // const handleExport = (type) => {
   //   try {
   //     switch (type) {
@@ -187,11 +221,12 @@ const Logs = () => {
       if (token_id) {
         // redirect to dashboard
         setappID(token_id);
-        handleSearchLevel({
-          target: {
-            value: "All"
-          }
-        });
+        // handleSearchLevel({
+        //   target: {
+        //     value: "All"
+        //   }
+        // });
+        //handleFilters()
       }
     }
   }, [appID]);
@@ -215,13 +250,18 @@ const Logs = () => {
             // @ts-ignore
             onChange={(e) => {
               setcurrentLevel(e.target.value);
-              handleSearchLevel(e);
+              //handleFilters();
+              //handleSearchLevel(e);
             }}
           />
         </Col>
         <Col span={5}>
           <h3>Time Range</h3>
-          <RangePicker showTime onChange={onRangeChange} />
+          <RangePicker showTime onChange={(e)=>{
+            debugger;
+            setTimeFilter(e);
+            handleFilters();
+          }} />
         </Col>
         <Col span={7} style={{
           paddingLeft: "10px"
@@ -229,7 +269,13 @@ const Logs = () => {
           <h3>Search</h3>
           <Search
             placeholder="input search text"
-            onSearch={(value) => handleSearch(value)}
+            onSearch={(value) => {
+              setSearchFilter(value);
+              //handleFilters();
+            }}
+            onChange={(e) => {
+              setSearchFilter(e.target.value);
+            }}
             enterButton
             allowClear
           />
@@ -241,11 +287,13 @@ const Logs = () => {
           <Button
             onClick={() => {
               setcurrentLevel("All");
-              handleSearchLevel({
-                target: {
-                  value: "All"
-                }
-              });
+              // handleSearchLevel({
+              //   target: {
+              //     value: "All"
+              //   }
+              // });
+              //handleFilters();
+              setRefreshCount(refreshCount+1);
             }}
           >
             <ReloadOutlined /> Refresh
@@ -285,7 +333,7 @@ const Logs = () => {
             />
           </div>
         ) : logs.length > 0 ? (
-          <LogViewer logs={logs} />
+          <LogViewer logs={logs} searchTerm={searchFilter} />
         ) : (
           <>
             <Player

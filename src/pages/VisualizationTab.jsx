@@ -85,7 +85,7 @@ const VisualizationTab = ({ uniqueId }) => {
       const lineResult = await lineResponse.json();
       lineData = Object.entries(lineResult).map(([type, value]) => ({
         type: `${type}`,
-        count: value
+        Count: value
       }));
       setloading2(false);
       setloading3(true);
@@ -95,7 +95,7 @@ const VisualizationTab = ({ uniqueId }) => {
       const lineErrorResult = await lineErrorResponse.json();
       lineErrorData = Object.entries(lineErrorResult).map(([type, value]) => ({
         type: `${type}`,
-        count: value
+        Count: value
       }));
       setloading3(false);
 
@@ -137,7 +137,7 @@ const VisualizationTab = ({ uniqueId }) => {
       configSetLine = {
         data: lineData,
         xField: "type",
-        yField: "count",
+        yField: "Count",
         xAxis: {
           range: [0, 1]
         }
@@ -145,7 +145,7 @@ const VisualizationTab = ({ uniqueId }) => {
       configSetLineError = {
         data: lineErrorData,
         xField: "type",
-        yField: "count",
+        yField: "Count",
         xAxis: {
           range: [0, 1]
         }
