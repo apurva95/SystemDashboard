@@ -87,7 +87,25 @@ const Logs = () => {
   const [searchFilter, setSearchFilter] = useState("");
   const [refreshCount, setRefreshCount] = useState(1);
 
-
+  const handleExport = async (type) => {
+    const response = await fetch(`https://localhost:7135/api/${type}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json' },
+        body: JSON.stringify(logs) // Replace 'data' with your actual data object
+      });
+      
+      if (response.ok) {
+        debugger;
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `logs.${type === 'pdf' ? 'pdf' : 'csv'}`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+      }
+    }
 
    const handleFilters = async () => {
     if(!appID)
@@ -95,7 +113,6 @@ const Logs = () => {
       return;
     }
     try {
-      debugger
       //const response = await fetch(`https://localhost:7135/api/searchTest?searchTerm=${e}&uniqueId=${appID}&type=Information&fromDate=Test&toDate=Test`);
       const response = await fetch('https://localhost:7135/api/searchTest?' + new URLSearchParams({
         searchTerm: searchFilter,
@@ -333,7 +350,11 @@ const Logs = () => {
             />
           </div>
         ) : logs.length > 0 ? (
-          <LogViewer logs={logs} searchTerm={searchFilter} />
+          <><div>
+             <LogViewer logs={logs} searchTerm={searchFilter} />
+          {/* <button onClick={() => handleExport('pdf')}>Export as PDF</button>
+          <button onClick={() => handleExport('csv')}>Export as CSV</button> */}
+          </div></>
         ) : (
           <>
             <Player

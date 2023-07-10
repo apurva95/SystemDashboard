@@ -1,25 +1,24 @@
 import React from "react";
-import { Alert, Pagination } from "antd";
+import { Card, Pagination } from "antd";
 import { useEffect, useState } from "react";
 
-const LogViewer = (props) => {
-  const { logs } = props;
-  const { searchTerm } = props;
-  const [totalLogs, settotalLogs] = useState();
+const AlertViewer = (props) => {
+  const { alerts } = props;
+  const [totalAlerts, setTotalAlerts] = useState();
   const [currentPage, setcurrentPage] = useState(1);
-  const [logsPerPage, setlogsPerPage] = useState(10);
+  const [alertsPerPage, setAlertsPerPage] = useState(10);
   const [currentSets, setcurrentSets] = useState([]);
 
   useEffect(() => {
-    settotalLogs(logs.length);
-    setcurrentSets(logs.slice(0, logsPerPage));
-  }, [logs]);
+    setTotalAlerts(alerts.length);
+    setcurrentSets(alerts.slice(0, alertsPerPage));
+  }, [alerts]);
 
   useEffect(() => {
-    const indexOfLastLog = currentPage * logsPerPage;
-    const indexOfFirstLog = indexOfLastLog - logsPerPage;
-    setcurrentSets(logs.slice(indexOfFirstLog, indexOfLastLog));
-  }, [currentPage, logsPerPage]);
+    const indexOfLastLog = currentPage * alertsPerPage;
+    const indexOfFirstLog = indexOfLastLog - alertsPerPage;
+    setcurrentSets(alerts.slice(indexOfFirstLog, indexOfLastLog));
+  }, [currentPage, alertsPerPage]);
 
   function highlightText(text, highlight) {
     if (!highlight) {
@@ -35,8 +34,10 @@ const LogViewer = (props) => {
 }
   return (
     <div>
-      {currentSets.map((log) => (
-        <Alert message={highlightText((log.message + "" + log.type),searchTerm)} type={log.level} hoverable showIcon />
+      {currentSets.map((alert) => (
+         <Card hoverable>
+         <h3>{alert.body}</h3>
+      </Card>
       ))}
 
       <div
@@ -49,14 +50,14 @@ const LogViewer = (props) => {
         <Pagination
           onChange={(page, pageSize) => {
             setcurrentPage(page);
-            setlogsPerPage(pageSize);
+            setAlertsPerPage(pageSize);
           }}
           current={currentPage}
-          total={totalLogs}
+          total={totalAlerts}
         />
       </div>
     </div>
   );
 };
 
-export default LogViewer;
+export default AlertViewer;

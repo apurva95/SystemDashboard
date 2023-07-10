@@ -2,7 +2,6 @@
   "name": "logging-system-dashboard",
   "version": "0.1.0",
   "private": true,
-  "proxy": "https://tiny-snails-lick.loca.lt/",
   "dependencies": {
     "@ant-design/plots": "^1.2.5",
     "@lottiefiles/react-lottie-player": "^3.5.3",

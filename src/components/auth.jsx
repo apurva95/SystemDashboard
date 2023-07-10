@@ -10,6 +10,7 @@ const AuthMiddleware = (props) => {
     // get token_id from  local storage
     if (window && window.localStorage) {
       let token_id = window.localStorage.getItem("appID");
+      debugger;
       if (token_id) {
         // redirect to dashboard
         setcanShow(true);
