@@ -18,8 +18,8 @@ const HomePage = () => {
 
   useEffect(() => {
     // get token_id from  local storage
-    if (window && window.localStorage) {
-      let token_id = window.localStorage.getItem("appID");
+    if (window && window.sessionStorage) {
+      let token_id = window.sessionStorage.getItem("appID");
       if (token_id) {
         // redirect to dashboard
         setappID(token_id);
@@ -43,7 +43,7 @@ const HomePage = () => {
   ];
 
   const doLogout = () => { 
-    window.localStorage.removeItem("appID");
+    window.sessionStorage.removeItem("appID");
     history("/login");
    }
 

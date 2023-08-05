@@ -7,8 +7,8 @@ const Visualization = () => {
    const [appID, setappID] = useState("");
    useEffect(() => {
       // get token_id from  local storage
-      if (window && window.localStorage) {
-         let token_id = window.localStorage.getItem("appID");
+      if (window && window.sessionStorage) {
+         let token_id = window.sessionStorage.getItem("appID");
          if (token_id) {
             // redirect to dashboard
             setappID(token_id);

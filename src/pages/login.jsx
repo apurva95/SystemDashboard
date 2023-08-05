@@ -1,5 +1,5 @@
 // @ts-check
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useContext } from "react";
 import { Form, Input, Button, Checkbox, Typography, message } from "antd";
 import { useNavigate } from "react-router-dom";
 
@@ -32,7 +32,8 @@ const LoginPage = () => {
           if (data) {
             message.success("App ID is valid");
             // save to load local storage
-            localStorage.setItem("appID", appID);
+            sessionStorage.setItem("appID", appID);
+            debugger;
             history("/dashboard");
           } else {
             message.error("App ID is seems to be invalid");

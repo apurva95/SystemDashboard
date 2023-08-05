@@ -12,7 +12,6 @@ import LoginPage from './pages/login';
 import DashboardPage from './pages/dashboard';
 import HomePage from './pages/home';
 
-
 const router = createBrowserRouter([
   {
     path: "/",
@@ -32,7 +31,6 @@ function App() {
   // useEffect(() => {
 
   // }, []);
-
   return (
     <div className="App">
           <RouterProvider router={router} />

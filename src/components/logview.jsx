@@ -1,15 +1,85 @@
 import React from "react";
-import { Alert, Pagination } from "antd";
+import { Alert, Pagination, Select } from "antd";
 import { useEffect, useState } from "react";
+import { Button, Col, DatePicker, Input, Radio, Row, message, Dropdown, Menu } from "antd";
+import { DownOutlined, FilePdfOutlined, FileExcelOutlined } from '@ant-design/icons';
 
 const LogViewer = (props) => {
   const { logs } = props;
+  const { searchFilter } = props;
+  const { uniqueId } = props;
+  const { type } = props;
+  const { timeFilter } = props;
   const { searchTerm } = props;
   const [totalLogs, settotalLogs] = useState();
   const [currentPage, setcurrentPage] = useState(1);
   const [logsPerPage, setlogsPerPage] = useState(10);
   const [currentSets, setcurrentSets] = useState([]);
+  const [loadingPdf, setLoadingPdf] = useState(false);
+  const { Option } = Select;
+  const handlePageChange = (page) => {
+    setcurrentPage(page);
+  };
+   // Function to handle elements per page change
+   const handleElementsPerPageChange = (value) => {
+    setcurrentPage(1); // Reset current page when elements per page changes
+    setlogsPerPage(value);
+  };
+   // Calculate the start and end index of elements for the current page
+   const startIndex = (currentPage - 1) * logsPerPage;
+   const endIndex = startIndex + logsPerPage;
+   // Get the elements to display for the current page
+  const logsToDisplay = logs.slice(startIndex, endIndex);
+  const handleDoc = async (docType) => {
+    try {
+      setLoadingPdf(true);
+      const response = await fetch('https://localhost:7135/api/doc?' + new URLSearchParams({
+        searchTerm: searchTerm,
+        uniqueId: uniqueId,
+        type: type,
+        fromDate: timeFilter[0]? timeFilter[0] : "",
+        toDate: timeFilter[1] ? timeFilter[1] : "",
+        docType: docType
+}))
+debugger;
+      //const logsData = await response.json();
+      // const response = await fetch("https://localhost:7135/api/pdf", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   // Pass your log messages and unique ID to the server
+      //   body: JSON.stringify({
+      //     uniqueId: appID, // Replace with your unique ID
+      //     logMessages: [...logs], // Replace with your log messages array
+      //   }),
+      // });
+      if (!response.ok) {
+        throw new Error("PDF generation failed");
+      }
 
+      // const { BucketName, Key } = await response.json();
+debugger;
+      // Generate the download URL for the PDF
+      const downloadUrl = docType === 'pdf'?`https://loggerfiles.s3.eu-west-2.amazonaws.com/logFiles/${uniqueId}`+".pdf":`https://loggerfiles.s3.eu-west-2.amazonaws.com/logFiles/${uniqueId}`+".csv";
+
+    // Create a link and trigger the download
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.target = '_blank';  // Open the link in a new tab
+    link.download = docType === 'pdf'? uniqueId.toString() + '.pdf':uniqueId.toString() + '.csv';  // provide the file name
+
+    // This is where we simulate the user action
+    document.body.appendChild(link);
+
+    link.click();
+    link.remove(); // remove the link when done
+    } catch (error) {
+      console.error("Error generating or downloading PDF:", error);
+    } finally {
+      setLoadingPdf(false);
+    }
+  };
   useEffect(() => {
     settotalLogs(logs.length);
     setcurrentSets(logs.slice(0, logsPerPage));
@@ -35,7 +105,7 @@ const LogViewer = (props) => {
 }
   return (
     <div>
-      {currentSets.map((log) => (
+      {logsToDisplay.map((log) => (
         <Alert message={highlightText((log.message + "" + log.type),searchTerm)} type={log.level} hoverable showIcon />
       ))}
 
@@ -46,13 +116,37 @@ const LogViewer = (props) => {
           margin: "10px 0"
         }}
       >
+         <Dropdown
+            overlay={
+              <Menu>
+                <Menu.Item key="pdf" onClick={() => handleDoc('pdf')}>
+                  <FilePdfOutlined />
+                  Export as PDF
+                </Menu.Item>
+                <Menu.Item key="csv" onClick={() => handleDoc('csv')}>
+                  <FileExcelOutlined />
+                  Export as CSV
+                </Menu.Item>
+              </Menu>
+            }
+          >
+            <Button>
+              Export 
+              <DownOutlined />
+            </Button>
+          </Dropdown>
+          <Select value={logsPerPage} onChange={handleElementsPerPageChange}>
+        <Option value={10}>10</Option>
+        <Option value={20}>20</Option>
+        <Option value={50}>50</Option>
+        <Option value={75}>75</Option>
+        <Option value={100}>100</Option>
+      </Select>
         <Pagination
-          onChange={(page, pageSize) => {
-            setcurrentPage(page);
-            setlogsPerPage(pageSize);
-          }}
+          onChange={handlePageChange}
           current={currentPage}
           total={totalLogs}
+          pageSize={logsPerPage}
         />
       </div>
     </div>

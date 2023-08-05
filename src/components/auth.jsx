@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import {useEffect,useState} from "react";
+import {useEffect,useState } from "react";
 import { Skeleton } from "antd";
 
 const AuthMiddleware = (props) => {
@@ -8,8 +8,8 @@ const AuthMiddleware = (props) => {
   const history = useNavigate();
   useEffect(() => {
     // get token_id from  local storage
-    if (window && window.localStorage) {
-      let token_id = window.localStorage.getItem("appID");
+    if (window && window.sessionStorage) {
+      let token_id = window.sessionStorage.getItem("appID");
       debugger;
       if (token_id) {
         // redirect to dashboard
