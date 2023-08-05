@@ -41,25 +41,10 @@ const LogViewer = (props) => {
         toDate: timeFilter[1] ? timeFilter[1] : "",
         docType: docType
 }))
-debugger;
-      //const logsData = await response.json();
-      // const response = await fetch("https://localhost:7135/api/pdf", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   // Pass your log messages and unique ID to the server
-      //   body: JSON.stringify({
-      //     uniqueId: appID, // Replace with your unique ID
-      //     logMessages: [...logs], // Replace with your log messages array
-      //   }),
-      // });
       if (!response.ok) {
         throw new Error("PDF generation failed");
       }
 
-      // const { BucketName, Key } = await response.json();
-debugger;
       // Generate the download URL for the PDF
       const downloadUrl = docType === 'pdf'?`https://loggerfiles.s3.eu-west-2.amazonaws.com/logFiles/${uniqueId}`+".pdf":`https://loggerfiles.s3.eu-west-2.amazonaws.com/logFiles/${uniqueId}`+".csv";
 

@@ -33,7 +33,6 @@ const LoginPage = () => {
             message.success("App ID is valid");
             // save to load local storage
             sessionStorage.setItem("appID", appID);
-            debugger;
             history("/dashboard");
           } else {
             message.error("App ID is seems to be invalid");

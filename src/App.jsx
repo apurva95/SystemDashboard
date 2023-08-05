@@ -27,20 +27,9 @@ const router = createBrowserRouter([
   }
 ]);
 function App() {
-  // const [uniqueId, setUniqueId] = useState('');
-  // useEffect(() => {
-
-  // }, []);
   return (
     <div className="App">
           <RouterProvider router={router} />
-      {/* <Header />
-      {uniqueId ? (
-        <Dashboard uniqueId={uniqueId} />
-      ) : (
-        <SearchScreen onUniqueIdChange={setUniqueId} />
-      )}
-      <Footer /> */}
     </div>
   );
 }
