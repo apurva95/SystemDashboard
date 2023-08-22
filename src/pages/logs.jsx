@@ -83,7 +83,7 @@ const Logs = () => {
   const handleDoc = async (docType) => {
     try {
       setLoadingPdf(true);
-      const response = await fetch('https://localhost:7135/api/doc?' + new URLSearchParams({
+      const response = await fetch('https://logfetcher20230822191705.azurewebsites.net/api/doc?' + new URLSearchParams({
         searchTerm: searchFilter,
         uniqueId: appID,
         type: currentLevel,
