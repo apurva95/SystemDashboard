@@ -73,7 +73,7 @@ const VisualizationTab = ({ uniqueId }) => {
   const fetchLogs = async () => {
     try {
       setloading1(true);
-      const response = await fetch(`https://localhost:7135/api/visualisationLogs?uniqueId=${uniqueId}`);
+      const response = await fetch(`https://logfetcher20230822191705.azurewebsites.net/api/visualisationLogs?uniqueId=${uniqueId}`);
       const result = await response.json();
       data = Object.entries(result).map(([type, value]) => ({
         type: `${type}`,
@@ -90,7 +90,7 @@ const VisualizationTab = ({ uniqueId }) => {
       setloading2(false);
       setloading3(true);
       const lineErrorResponse = await fetch(
-        `https://localhost:7135/api/visualisationLogsForLineGraphError?uniqueId=${uniqueId}`
+        `https://logfetcher20230822191705.azurewebsites.net/api/visualisationLogsForLineGraphError?uniqueId=${uniqueId}`
       );
       const lineErrorResult = await lineErrorResponse.json();
       lineErrorData = Object.entries(lineErrorResult).map(([type, value]) => ({

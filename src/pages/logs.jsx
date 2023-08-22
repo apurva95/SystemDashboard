@@ -120,7 +120,7 @@ const Logs = () => {
       return;
     }
     try {
-      const response = await fetch('https://localhost:7135/api/searchTest?' + new URLSearchParams({
+      const response = await fetch('https://logfetcher20230822191705.azurewebsites.net/api/searchTest?' + new URLSearchParams({
         searchTerm: searchFilter,
         uniqueId: appID,
         type: currentLevel,

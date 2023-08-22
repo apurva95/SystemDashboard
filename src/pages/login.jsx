@@ -26,7 +26,7 @@ const LoginPage = () => {
       return;
     } else {
       // check the url to validate the app id
-      fetch(`https://localhost:7135/api/checkUniqueID?uniqueId=${appID}`)
+      fetch(`https://logfetcher20230822191705.azurewebsites.net/api/checkUniqueID?uniqueId=${appID}`)
         .then((res) => res.json())
         .then((data) => {
           if (data) {
