@@ -81,7 +81,7 @@ const VisualizationTab = ({ uniqueId }) => {
       }));
       setloading1(false);
       setloading2(true);
-      const lineResponse = await fetch(`https://localhost:7135/api/visualisationLogsForLineGraph?uniqueId=${uniqueId}`);
+      const lineResponse = await fetch(`https://logfetcher20230822191705.azurewebsites.net/api/visualisationLogsForLineGraph?uniqueId=${uniqueId}`);
       const lineResult = await lineResponse.json();
       lineData = Object.entries(lineResult).map(([type, value]) => ({
         type: `${type}`,

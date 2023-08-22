@@ -12,7 +12,7 @@ const AlertsTab = () => {
   const fetchAlerts = async () => {
     setIsLoading(true); // Set loading to true at the start
     try {
-      const response = await fetch(`https://localhost:7135/api/alerts?uniqueId=${appID}`);
+      const response = await fetch(`https://logfetcher20230822191705.azurewebsites.net/api/alerts?uniqueId=${appID}`);
       const result = await response.json();
       setAlerts(result);
       setIsLoading(false);
